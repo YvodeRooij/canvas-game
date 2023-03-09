@@ -188,3 +188,9 @@ body {
   animation-name: swoop-in;
   animation-duration: 15s;
 }
+
+.lose {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
