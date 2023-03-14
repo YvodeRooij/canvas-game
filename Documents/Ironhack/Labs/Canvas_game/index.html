@@ -20,9 +20,7 @@
   <body>
     <!-- game-intro -->
 
-    <div class="game-intro">
-      <button id="btn-end">Cancel</button>
-
+    <section class="game-intro">
       <!-- Introduction text-->
       <section class="introduction">
         <h2>Hi there, Pirate!</h2>
@@ -30,7 +28,7 @@
           Welcome to the pirate game. Your goal is
           to avoid the cannons of Commodore
           Norrington and get to the chest of gold.
-          Do you have what is takes?
+          Do you have what it takes?
         </p2>
 
         <!-- Let jack sparrow enter with sunken ship-->
@@ -53,20 +51,47 @@
           <button id="btn-start">Start</button>
         </div>
       </section>
+    </section>
 
-      <div class="lose">
+    <div class="lose">
+      <img
+        src="./images/worst pirate.png"
+        alt="worst-pirate"
+      />
+    </div>
+
+    <!-- canvas -->
+    <section id="canvas-container">
+      <div id="score">
+        <p>Score:</p>
+        <span>0</span>
         <img
-          src="./images/worst pirate.png"
-          alt="worst-pirate"
+          class="img-life"
+          id="life1"
+          src="./images/life.png"
+          alt=""
+        />
+        <img
+          class="img-life"
+          id="life2"
+          src="./images/life.png"
+          alt=""
+        />
+        <img
+          class="img-life"
+          id="life3"
+          src="./images/life.png"
+          alt=""
         />
       </div>
+    </section>
 
-      <!-- canvas -->
-      <div id="canvas-container">
-        <p id="score">Score: <span> 0</span></p>
-      </div>
-    </div>
+    <section class="buttons-bottom-canvas">
+      <button id="btn-end">Cancel</button>
+      <button id="play-again">Play again</button>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.6.0/lib/p5.js"></script>
+    <script src="script.js"></script>
   </body>
-  <script src="https://cdn.jsdelivr.net/npm/p5@1.6.0/lib/p5.js"></script>
-  <script src="script.js"></script>
 </html>

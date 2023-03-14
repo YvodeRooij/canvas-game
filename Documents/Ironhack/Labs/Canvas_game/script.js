@@ -60,6 +60,12 @@ let shark2X =
 let shark2Y =
   Math.floor(Math.random() * 200) + 10;
 
+// life variables
+const life1 = document.getElementById("life1");
+const life2 = document.getElementById("life2");
+const life3 = document.getElementById("life3");
+
+// function preload
 function preload() {
   ocean = loadImage(`./images/ocean.jpg`);
   pirateShip = loadImage(
@@ -93,7 +99,11 @@ function setup() {
   select("#canvas-container").hide(); // hide the canvas container initially
   image(jackSparrowIntro, 0, 0, width, height);
   select(`.lose`).hide(); // hide the worst pirate image initially
+  select(`.buttons-bottom-canvas`).hide();
   noLoop();
+  livesRemaining = document.querySelectorAll(
+    ".life:not(.hidden)"
+  ).length;
 }
 
 function draw() {
@@ -177,7 +187,7 @@ function move() {
 function startGame() {
   document.querySelector(
     "#canvas-container"
-  ).style.display = "block";
+  ).style.display = "block"; // display the canvas
   document.body.style.backgroundColor =
     "antiquewhite";
   document.body.style.backgroundImage = "none";
@@ -191,6 +201,7 @@ function startGame() {
     ".start-options"
   ).style.display = "none";
   select(`.lose`).hide(); // hide the commodore picture
+  select(`.buttons-bottom-canvas`).show();
   loop();
 }
 
@@ -257,20 +268,22 @@ function checkCollision() {
     distShark2 < radiusSum
   ) {
     // Collision detected, end the game
-    // When lose, you must be the worst pirate I have ever seen
-    endGame();
+    lifeDown(); // invoke the lifeDown function
   } else if (distTreasure < radiusSum) {
-    updateScore();
+    // Increase the score when the pirate ship collides with the treasure
+    totalScore += 1;
+    document.getElementById(
+      "score"
+    ).textContent = `Score: ${totalScore}`;
+    nextLevel(); // restart the game
   }
 }
 
-function updateScore() {
-  totalScore += 1;
-  document.getElementById(
-    "score"
-  ).textContent = `Score: ${totalScore}`;
-  noLoop();
-  redraw();
+function nextLevel() {
+  restartGame();
+  // life1.style.display = "block";
+  // life2.style.display = "block";
+  // life3.style.display = "block";
 }
 
 // when win, he is the best pirate i have ever seen
@@ -278,6 +291,41 @@ function updateScore() {
 buttonEnd.onclick = () => {
   endGame();
 };
+
+let testLives = 3;
+
+// substract one life by disappearing the life image
+function lifeDown() {
+  // Subtract one from the number of lives remaining and hide the corresponding life image
+  const elements =
+    document.querySelectorAll(".img-life");
+  let numLives = elements.length;
+
+  for (let i = 0; i < numLives; i++) {
+    const element = elements[i];
+    if (element.style.display !== "none") {
+      element.style.display = "none";
+      testLives--;
+      console.log(
+        "Lives remaining after collision:",
+        numLives
+      );
+      break;
+    }
+  }
+
+  // Update the lives remaining display
+  console.log(`Lives remaining: ${numLives}`);
+
+  if (testLives === 0) {
+    endGame();
+  } else {
+    // Restart the game after a collision
+    restartGame();
+  }
+}
+
+// game over
 function endGame() {
   select("#canvas-container").hide();
   document.body.style.backgroundColor =
@@ -288,4 +336,46 @@ function endGame() {
 }
 
 // restart the game
-// make sure the sharks are not on the same place as the treasure
+function restartGame() {
+  // Reset all game variables to their initial values
+  // life1.style.visibility = "visible"; this was the problem first
+  // life2.style.visibility = "visible";
+  // life3.style.visibility = "visible";
+  ocean1X = 0;
+  ocean1Y = 0;
+  ocean2X = 700;
+  ocean2Y = 0;
+  pirateShipX = 350;
+  pirateShipY = 300;
+  enemyCannonLeftX = 0;
+  enemyCannonLeftY = 200;
+  enemyCannonRightX = 650;
+  enemyCannonRightY = 200;
+  cannonballLeftX = enemyCannonLeftX + 30;
+  cannonballLeftY = enemyCannonLeftY - 5;
+  cannonballRightX = enemyCannonRightX - 30;
+  cannonballRightY = enemyCannonRightY - 5;
+  treasureX =
+    Math.floor(Math.random() * 591) + 10;
+  treasureY =
+    Math.floor(Math.random() * 200) + 10;
+  shark1X = Math.floor(Math.random() * 591) + 10;
+  shark1Y = Math.floor(Math.random() * 200) + 10;
+  shark2X = Math.floor(Math.random() * 591) + 10;
+  shark2Y = Math.floor(Math.random() * 200) + 10;
+
+  // Reset the canvas and game elements
+  select("#canvas-container").show();
+  document.body.style.backgroundColor =
+    "antiquewhite";
+  document.body.style.backgroundImage = "none";
+  // select(".lose").hide();
+  loop();
+}
+
+// restart the gane when play again button is pressed
+let gameRestart = (document.getElementById(
+  `play-again`
+).onclick = () => {
+  restartGame();
+});
