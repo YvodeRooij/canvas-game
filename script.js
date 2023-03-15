@@ -61,9 +61,10 @@ let shark2Y =
   Math.floor(Math.random() * 200) + 10;
 
 // life variables
-const life1 = document.getElementById("life1");
-const life2 = document.getElementById("life2");
-const life3 = document.getElementById("life3");
+// const life1 = document.getElementById("life1");
+// const life2 = document.getElementById("life2");
+// const life3 = document.getElementById("life3");
+let life;
 
 // function preload
 function preload() {
@@ -90,6 +91,7 @@ function preload() {
   cannonnballRight = loadImage(
     `./images/cannonball-removebg-preview.png`
   );
+  life = loadImage(`./images/life.png`);
 }
 
 function setup() {
@@ -100,6 +102,7 @@ function setup() {
   image(jackSparrowIntro, 0, 0, width, height);
   select(`.lose`).hide(); // hide the worst pirate image initially
   select(`.buttons-bottom-canvas`).hide();
+  select(`.win`).hide();
   noLoop();
   livesRemaining = document.querySelectorAll(
     ".life:not(.hidden)"
@@ -110,7 +113,7 @@ function draw() {
   // Move the ocean images to the right
   move();
 
-  // Display the ocean, pirate ship, and enemy cannons
+  // Display the ocean, pirate ship, enemy cannons and lives
   image(ocean, ocean1X, ocean1Y, width, height);
   image(ocean, ocean2X, ocean2Y, width, height);
   image(
@@ -135,11 +138,36 @@ function draw() {
     30
   );
   image(treasure, treasureX, treasureY, 70, 70);
-  image(shark1, shark1X, shark1Y, 60, 60);
-  image(shark1, shark2X, shark2Y, 60, 60);
+  // add sharks. add more sharks when higher score than 3
+  if (totalScore < 3) {
+    image(shark1, shark1X, shark1Y, 60, 60);
+    image(shark1, shark2X, shark2Y, 60, 60);
+  } else {
+    image(shark1, shark1X, shark1Y, 60, 60);
+    image(shark1, shark2X, shark2Y, 60, 60);
+    image(
+      shark1,
+      shark1X + 100,
+      shark1Y + 100,
+      60,
+      60
+    );
+    image(
+      shark1,
+      shark2X + 100,
+      shark2Y + 100,
+      60,
+      60
+    );
+  }
+  for (let i = 0; i < testLives; i++) {
+    image(life, i * 30, 0, 30, 30);
+  }
 
-  // Move cannonballLeft to the right and ehck for boundary
-  cannonballLeftX += 2;
+  // Move cannonballLeft to the right and ehck for boundary. Also increase speed when score is >3
+  if (totalScore <= 3) {
+    cannonballLeftX += 2;
+  } else cannonballLeftX += 4;
   if (cannonballLeftX > 700) {
     cannonballLeftX = enemyCannonLeftX + 30;
   }
@@ -151,8 +179,10 @@ function draw() {
     cannonnballHeight
   );
 
-  // Move cannonballRight to the left and have boundary
-  cannonballRightX -= 2;
+  // Move cannonballRight to the left and have boundary. Also increase speed when score is >3
+  if (totalScore <= 3) {
+    cannonballRightX -= 2;
+  } else cannonballRightX -= 4;
   if (cannonballRightX < 0) {
     cannonballRightX = enemyCannonRightX - 30;
   }
@@ -280,10 +310,9 @@ function checkCollision() {
 }
 
 function nextLevel() {
-  restartGame();
-  // life1.style.display = "block";
-  // life2.style.display = "block";
-  // life3.style.display = "block";
+  if (totalScore === 1) {
+    restartGame();
+  } else gameWon();
 }
 
 // when win, he is the best pirate i have ever seen
@@ -297,25 +326,7 @@ let testLives = 3;
 // substract one life by disappearing the life image
 function lifeDown() {
   // Subtract one from the number of lives remaining and hide the corresponding life image
-  const elements =
-    document.querySelectorAll(".img-life");
-  let numLives = elements.length;
-
-  for (let i = 0; i < numLives; i++) {
-    const element = elements[i];
-    if (element.style.display !== "none") {
-      element.style.display = "none";
-      testLives--;
-      console.log(
-        "Lives remaining after collision:",
-        numLives
-      );
-      break;
-    }
-  }
-
-  // Update the lives remaining display
-  console.log(`Lives remaining: ${numLives}`);
+  testLives -= 1;
 
   if (testLives === 0) {
     endGame();
@@ -327,12 +338,14 @@ function lifeDown() {
 
 // game over
 function endGame() {
-  select("#canvas-container").hide();
-  document.body.style.backgroundColor =
-    "transparent";
-  document.body.style.backgroundImage =
-    "url('./images/island.jpg')";
-  select(`.lose`).show(); // show the worst pirate image
+  if (canvas) {
+    canvas.remove();
+    document.body.style.backgroundColor =
+      "transparent";
+    document.body.style.backgroundImage =
+      "url('./images/island.jpg')";
+    select(`.lose`).show(); // show the worst pirate image
+  }
 }
 
 // restart the game
@@ -371,6 +384,19 @@ function restartGame() {
   document.body.style.backgroundImage = "none";
   // select(".lose").hide();
   loop();
+}
+
+// game won
+
+function gameWon() {
+  if (canvas) {
+    canvas.remove();
+  }
+  document.body.style.backgroundColor =
+    "transparent";
+  document.body.style.backgroundImage =
+    "url('./images/island.jpg')";
+  select(`.win`).show();
 }
 
 // restart the gane when play again button is pressed
