@@ -9,6 +9,7 @@ let buttonEnd =
   document.getElementById(`btn-end`);
 
 let jackSparrowIntro;
+
 let totalScore = 0;
 //ocean variables
 let ocean;
@@ -61,10 +62,12 @@ let shark2Y =
   Math.floor(Math.random() * 200) + 10;
 
 // life variables
-// const life1 = document.getElementById("life1");
-// const life2 = document.getElementById("life2");
-// const life3 = document.getElementById("life3");
 let life;
+
+// songs
+let songIntro;
+let songDuringGame;
+let audioContext;
 
 // function preload
 function preload() {
@@ -92,6 +95,12 @@ function preload() {
     `./images/cannonball-removebg-preview.png`
   );
   life = loadImage(`./images/life.png`);
+  songDuringGame = loadSound(
+    "./Sounds/He's a Pirate.mp3"
+  );
+  songIntro = loadSound(
+    `./Sounds/Yo Ho, Yo Ho! A pirates life for me.mp3`
+  );
 }
 
 function setup() {
@@ -103,10 +112,10 @@ function setup() {
   select(`.lose`).hide(); // hide the worst pirate image initially
   select(`.buttons-bottom-canvas`).hide();
   select(`.win`).hide();
+  audioContext = getAudioContext();
+  audioContext.resume();
+  songIntro.play();
   noLoop();
-  livesRemaining = document.querySelectorAll(
-    ".life:not(.hidden)"
-  ).length;
 }
 
 function draw() {
@@ -213,8 +222,12 @@ function move() {
     ocean2X = -width;
   }
 }
+
 // Start the game
 function startGame() {
+  songIntro.stop();
+  songDuringGame.play();
+
   document.querySelector(
     "#canvas-container"
   ).style.display = "block"; // display the canvas
@@ -310,7 +323,7 @@ function checkCollision() {
 }
 
 function nextLevel() {
-  if (totalScore === 1) {
+  if (totalScore < 10) {
     restartGame();
   } else gameWon();
 }
@@ -340,10 +353,13 @@ function lifeDown() {
 function endGame() {
   if (canvas) {
     canvas.remove();
+    songDuringGame.stop();
+
     document.body.style.backgroundColor =
       "transparent";
     document.body.style.backgroundImage =
       "url('./images/island.jpg')";
+    songDuringGame.stop();
     select(`.lose`).show(); // show the worst pirate image
   }
 }
@@ -351,9 +367,7 @@ function endGame() {
 // restart the game
 function restartGame() {
   // Reset all game variables to their initial values
-  // life1.style.visibility = "visible"; this was the problem first
-  // life2.style.visibility = "visible";
-  // life3.style.visibility = "visible";
+
   ocean1X = 0;
   ocean1Y = 0;
   ocean2X = 700;
@@ -397,11 +411,12 @@ function gameWon() {
   document.body.style.backgroundImage =
     "url('./images/island.jpg')";
   select(`.win`).show();
+  songDuringGame.stop();
 }
 
 // restart the gane when play again button is pressed
 let gameRestart = (document.getElementById(
   `play-again`
 ).onclick = () => {
-  restartGame();
+  startGame();
 });
