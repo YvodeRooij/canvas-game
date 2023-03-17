@@ -105,13 +105,14 @@ function preload() {
 
 function setup() {
   createCanvas(700, 380).parent(
-    `canvas-container`
+    "canvas-container"
   );
   select("#canvas-container").hide(); // hide the canvas container initially
   image(jackSparrowIntro, 0, 0, width, height);
-  select(`.lose`).hide(); // hide the worst pirate image initially
-  select(`.buttons-bottom-canvas`).hide();
-  select(`.win`).hide();
+  select(".lose").hide(); // hide the worst pirate image initially
+  select(".buttons-bottom-canvas").hide();
+  select(".win").hide();
+
   audioContext = getAudioContext();
   audioContext.resume();
   songIntro.play();
