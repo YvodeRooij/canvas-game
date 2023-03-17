@@ -114,7 +114,6 @@ function setup() {
   select(`.win`).hide();
   audioContext = getAudioContext();
   audioContext.resume();
-  songIntro.play();
   noLoop();
 }
 
