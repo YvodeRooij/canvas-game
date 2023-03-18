@@ -71,35 +71,35 @@ let audioContext;
 
 // function preload
 function preload() {
-  ocean = loadImage(`./images/ocean.jpg`);
+  ocean = loadImage(`images/ocean.jpg`);
   pirateShip = loadImage(
-    `./images/pirate-ship.png`
+    `images/pirate-ship.png`
   );
   enemyCannonLeft = loadImage(
-    `./images/cannon-left-side.png`
+    `images/cannon-left-side.png`
   );
   enemyCannonRight = loadImage(
-    `./images/cannon-right-side.png`
+    `images/cannon-right-side.png`
   );
   jackSparrowIntro = loadImage(
-    `./images/jack_sparrow_sinking.jpg`
+    `images/jack_sparrow_sinking.jpg`
   );
   treasure = loadImage(
-    `./images/treasure_chest-removebg-preview.png`
+    `images/treasure_chest-removebg-preview.png`
   );
   shark1 = loadImage(`./images/shark_image.png`);
   cannonnballLeft = loadImage(
-    `./images/cannonball-removebg-preview.png`
+    `images/cannonball-removebg-preview.png`
   );
   cannonnballRight = loadImage(
-    `./images/cannonball-removebg-preview.png`
+    `images/cannonball-removebg-preview.png`
   );
-  life = loadImage(`./images/life.png`);
+  life = loadImage(`images/life.png`);
   songDuringGame = loadSound(
-    "./Sounds/He's a Pirate.mp3"
+    "Sounds/He's a Pirate.mp3"
   );
   songIntro = loadSound(
-    `./Sounds/Yo Ho, Yo Ho! A pirates life for me.mp3`
+    `Sounds/Yo Ho, Yo Ho! A pirates life for me.mp3`
   );
 }
 
@@ -226,7 +226,7 @@ function move() {
 
 // Start the game
 function startGame() {
-  songIntro.stop();
+  // songIntro.stop();
   songDuringGame.play();
 
   document.querySelector(
